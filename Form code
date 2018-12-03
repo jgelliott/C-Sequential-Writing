@@ -1,0 +1,94 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using System.IO;
+
+namespace Write2
+{
+    public partial class Form1 : Form
+    {
+        public static string strfilename;
+        public static int errorflag = 0;
+        public string line;
+        public string lname, fname, branch, education;
+        public bool diploma, record, drugs, weight;
+        public int branchnum;
+        public Form1()
+        {
+            InitializeComponent();
+        }
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            //choosing file to write to
+            OpenFileDialog openFileDialog1 = new OpenFileDialog();
+
+            if (openFileDialog1.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                strfilename = openFileDialog1.FileName;
+        }
+        private void btnwrite_Click(object sender, EventArgs e)
+        {
+            errorflag = 0;
+            //last name field
+            if (string.IsNullOrEmpty(txtlname.Text))
+            {
+                errorflag++;
+            }
+            else
+                lname = txtlname.Text;
+            //first name field
+            if (string.IsNullOrEmpty(txtfname.Text))
+            {
+                errorflag++;
+            }
+            else
+                fname = txtfname.Text;
+            //branch listbox see program.cs
+            if (lbbranch.SelectedIndex > -1)
+            {
+                branch = StudentEntry.branchcheck(lbbranch.SelectedIndex);
+            }
+            else
+                errorflag++;
+            //education radio buttons see program.cs
+            education = StudentEntry.education(radfresh.Checked, radsoph.Checked, radjunior.Checked, radsenior.Checked, radgrad.Checked);
+
+            //putting all chkboxes bool properties into variables
+            diploma = chkdiploma.Checked;
+            record = chkrecord.Checked;
+            drugs = chkdrugs.Checked;
+            weight = chkweight.Checked;
+
+            //adding all lines for final write
+            line = lname + "," + fname + "," + branch + "," + education + "," + diploma + "," + record + "," + drugs + "," + weight;
+            //checking error flags and sending to write see program.cs
+            if (errorflag > 0)
+            {
+                MessageBox.Show("Please Check Input Fields");
+            }
+            else
+                StudentEntry.writing(line);
+                txtlname.Text = "";
+                txtfname.Text = "";
+                lbbranch.SelectedIndex = -1;
+                radfresh.Checked = false;
+                radsoph.Checked = false;
+                radjunior.Checked = false;
+                radsenior.Checked = false;
+                radgrad.Checked = false;
+                chkdiploma.Checked = false;
+                chkrecord.Checked = false;
+                chkdrugs.Checked = false;
+                chkweight.Checked = false;
+        }
+        private void btnExit_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+    }
+}
