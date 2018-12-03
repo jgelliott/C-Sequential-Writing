@@ -1,0 +1,92 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using System.IO;
+
+namespace Write2
+{
+    static class Program
+    {
+        /// <summary>
+        /// The main entry point for the application.
+        /// </summary>
+        [STAThread]
+        public static void Main()
+        {
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
+            Application.Run(new Form1());
+        }
+    }
+    static class StudentEntry
+    {
+        public static DialogResult res;
+        
+        public static void writing(string line)
+        {
+            //trycatch for writing to chosen file
+            try
+            {
+                FileStream outfile = new FileStream(Form1.strfilename, FileMode.Append,
+                FileAccess.Write);
+
+                StreamWriter writer = new StreamWriter(outfile);
+
+                writer.WriteLine(line);
+
+                writer.Close();
+                outfile.Close();
+            }
+            catch (IOException e)
+            {
+                res = MessageBox.Show("Error in sequential file",
+                     "Error", MessageBoxButtons.OK,
+                     MessageBoxIcon.Hand);
+
+                res = MessageBox.Show(e.Message, "Error",
+                     MessageBoxButtons.OK, MessageBoxIcon.Hand);
+            }
+        }
+        //based on the selected index, sending the name of the branch
+        public static string branchcheck(int branchint)
+        {
+            string branch = "";
+            switch (branchint)
+            {
+                case 0:
+                    branch = "Army";
+                    break;
+                case 1:
+                    branch = "Air Force";
+                    break;
+                case 2:
+                    branch = "Marines";
+                    break;
+                case 3:
+                    branch = "Navy";
+                    break;
+            }
+            return branch;
+        }
+        //based on which radio btn is checked, sending the name of the one that is checked
+        public static string education(bool fresh, bool soph, bool junior,bool senior,bool grad)
+        {
+            string ed = "";
+            if (fresh == true)
+                ed = "Freshman";
+            else if (soph == true)
+                ed = "Sophomore";
+            else if (junior == true)
+                ed = "Junior";
+            else if (senior == true)
+                ed = "Senior";
+            else if (grad == true)
+                ed = "Graduated";
+            else
+                Form1.errorflag++;
+            return ed;  
+        }
+    }
+}
